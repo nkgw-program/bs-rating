@@ -18,5 +18,8 @@
   "homepage": "https://github.com/nkgw-program/bs-rating#readme",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "express-session": "^1.17.2"
   }
 }
