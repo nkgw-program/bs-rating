@@ -1,14 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser')
 const session = require('express-session');
+const router = express.Router();
 const request = require('request');
 const app = express();
 const path = require('path');
+const { get } = require('request');
 const port = 4000;
 
-//for zaif api
-var zaif = require('zaif.jp');
-var api = zaif.PublicApi;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -30,27 +29,28 @@ const allowCrossDomain = function(req, res, next) {
 }
 app.use(allowCrossDomain)
 
+
 /* Hello World */
-app.get('/', (req, res) => res.send('Hello World'));
+app.get('/', (req, res) => {
+  res.send("hello world");
+});
 
 
 
 /*--------- zaif API ---------*/
 
-const url_zaif = 'https://api.zaif.jp/api/1/';
-
 //通過情報の取得
-app.get('/zaif', (req, res) => {
-  const url = url_zaif + 'currencies/all';
-    request.get({
-      uri : url,
-      headders : {'content-type' : 'application/json'},
-      qs : {
-      },
-      json : true
-    }), function(err, req, data){
-      res.send(data);
-    }
+app.get('/zaif/depth', (req, res) => {
+  
+  const option = {
+    url: 'https://api.zaif.jp/api/1/depth/btc_jpy',
+    method: 'GET',
+    json: true
+  }
+
+  request(option, function (error, response, body) {
+    res.send(body);
+  });
 });
 
 app.listen(port);
