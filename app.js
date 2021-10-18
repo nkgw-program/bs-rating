@@ -33,10 +33,10 @@ app.get('/', (req, res) => res.send('Hello World'));
 
 /*--------- zaif API ---------*/
 
-const url_zaif = ' https://api.zaif.jp/api/1/';
+const url_zaif = 'https://api.zaif.jp/api/1/';
 
 //通過情報の取得
-app.get('/zaif/currencies', (req, res) => {
+app.get('/zaif', (req, res) => {
   const url = url_zaif + 'currencies/all';
     request.get({
       uri : url,
