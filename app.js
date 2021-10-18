@@ -6,6 +6,10 @@ const app = express();
 const path = require('path');
 const port = 4000;
 
+//for zaif api
+var zaif = require('zaif.jp');
+var api = zaif.PublicApi;
+
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
@@ -45,7 +49,7 @@ app.get('/zaif', (req, res) => {
       },
       json : true
     }), function(err, req, data){
-      console.log(data);
+      res.send(data);
     }
 });
 
