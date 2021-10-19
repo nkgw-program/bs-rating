@@ -38,26 +38,58 @@ app.get('/', (req, res) => {
 
 
 
-/*--------- zaif API ---------*/
+/* --------- zaif API ---------*/
 
-/* --板情報の取得-- */
+/* --zaif API 板情報の取得-- */
 app.get('/zaif/depth', (req, res) => {
-  //通貨ペアの配列化
+
+  //返り値
   const depth = [];
+
+  //すべての通貨ペアに対して
   zaifApi.currency_pairs("all").then(pairs => {
-    let lastFlg = 0;
+
+    //配列の最終要素の検知
+    let index = 0;
+
     pairs.forEach(pair => {
+      //一つ一つの板情報の取得
       zaifApi.depth(pair.currency_pair).then(value => {
-        lastFlg++;
+        index++;
         depth.push(value);
-        if(lastFlg === pairs.length){
-          console.log
+        if(index === pairs.length){
           res.send(depth);
         }
       });
     });
   });
 });
+
+/* --zaif API 終値の取得-- */
+app.get('/zaif/last_price', (req, res) => {
+
+  //返り値
+  const last_price = [];
+
+  //すべての通貨ペアに対して
+  zaifApi.currency_pairs("all").then(pairs => {
+
+    //配列の最終要素の検知
+    let index = 0;
+
+    pairs.forEach(pair => {
+      //一つ一つの終値の取得
+      zaifApi.lastPrice(pair.currency_pair).then(value => {
+        index++;
+        last_price.push(value);
+        if(index === pairs.length){
+          res.send(last_price);
+        }
+      });
+    });
+  });
+});
+
 
 
 app.listen(port);
