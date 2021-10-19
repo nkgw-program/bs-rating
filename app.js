@@ -5,7 +5,6 @@ const router = express.Router();
 const request = require('request');
 const app = express();
 const path = require('path');
-const { get } = require('request');
 const port = 4000;
 
 
