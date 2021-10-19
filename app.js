@@ -5,6 +5,8 @@ const router = express.Router();
 const request = require('request');
 const app = express();
 const path = require('path');
+var zaif = require('zaif.jp');
+var zaifApi = zaif.PublicApi;
 const port = 4000;
 
 
@@ -38,17 +40,28 @@ app.get('/', (req, res) => {
 
 /*--------- zaif API ---------*/
 
-//通過情報の取得
+//板情報の取得
 app.get('/zaif/depth', (req, res) => {
   
+  //通貨ペアの取得(オプション)
   const option = {
-    url: 'https://api.zaif.jp/api/1/depth/btc_jpy',
+    url: 'https://api.zaif.jp/api/1/currency_pairs/all',
     method: 'GET',
     json: true
   }
 
+  //通貨ペアの取得(API呼び出し)
   request(option, function (error, response, body) {
-    res.send(body);
+    
+    //通貨ペアの配列化
+    const pairs = JSON.parse(JSON.stringify(body));
+
+    const allDepth = [];
+    pairs.forEach(pair => {
+      const temp = zaifApi.depth(pair.currency_pair)
+      allDepth.push(temp);
+    });
+    res.send(JSON.parse(JSON.stringify(allDepth)));
   });
 });
 
