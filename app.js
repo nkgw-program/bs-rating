@@ -40,29 +40,24 @@ app.get('/', (req, res) => {
 
 /*--------- zaif API ---------*/
 
-//板情報の取得
+/* --板情報の取得-- */
 app.get('/zaif/depth', (req, res) => {
-  
-  //通貨ペアの取得(オプション)
-  const option = {
-    url: 'https://api.zaif.jp/api/1/currency_pairs/all',
-    method: 'GET',
-    json: true
-  }
-
-  //通貨ペアの取得(API呼び出し)
-  request(option, function (error, response, body) {
-    
-    //通貨ペアの配列化
-    const pairs = JSON.parse(JSON.stringify(body));
-
-    const allDepth = [];
+  //通貨ペアの配列化
+  const depth = [];
+  zaifApi.currency_pairs("all").then(pairs => {
+    let lastFlg = 0;
     pairs.forEach(pair => {
-      const temp = zaifApi.depth(pair.currency_pair)
-      allDepth.push(temp);
+      zaifApi.depth(pair.currency_pair).then(value => {
+        lastFlg++;
+        depth.push(value);
+        if(lastFlg === pairs.length){
+          console.log
+          res.send(depth);
+        }
+      });
     });
-    res.send(JSON.parse(JSON.stringify(allDepth)));
   });
 });
+
 
 app.listen(port);
